@@ -78,14 +78,14 @@ namespace MP.Episerver.Labs.LanguageManager.DeepLTranslate
         public async Task<TextResult> DoTranslate(string inputText, string sourceLanguage, string targetLanguage)
         {
 
-            var sl = new CultureInfo(sourceLanguage);
-            var tl = new CultureInfo(targetLanguage);
+            var slci = new CultureInfo(sourceLanguage);
+            var tlci = new CultureInfo(targetLanguage);
 
             var translator = new DeepL.Translator(authkey);
             var translatedText = await translator.TranslateTextAsync(
                 inputText,
-                sl.TwoLetterISOLanguageName,
-                tl.TwoLetterISOLanguageName,
+                slci.TwoLetterISOLanguageName,
+                tlci.TwoLetterISOLanguageName,
                 new TextTranslateOptions { Formality = DLFormality, PreserveFormatting = true, SentenceSplittingMode = SentenceSplittingMode.Off }
                 );
 

@@ -1,4 +1,4 @@
-# MP.Episerver.Labs.LanguageManager.DeepLTranslate
+# MP.LanguageManager.DeepLTranslate
 
 ## Description
 
@@ -10,6 +10,9 @@ To enable LanguageManager to use the DeepL Translator Provider, ensure that it i
 
 You will need a Subscription Key for this extension to function - you can create one at https://www.deepl.com/pro-api
 
+A &lt;DeepL&gt; Configuration element in appSettings can be used to control the formality of translations, with options Less, More, PreferLess, PreferMore, Default.
+
 ## Usage
 
 Install the Languages gadget and then auto-translate all your content through DeepL!
+
