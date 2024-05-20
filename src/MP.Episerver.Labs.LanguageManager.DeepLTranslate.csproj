@@ -6,20 +6,21 @@
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
   </PropertyGroup>
   <PropertyGroup>
-    <Title>MP.Episerver.Labs.LanguageManager.DeepLTranslate</Title>
-    <PackageId>MP.Episerver.Labs.LanguageManager.DeepLTranslate</PackageId>
+    <Title>MP.LanguageManager.DeepLTranslate</Title>
+    <PackageId>MP.LanguageManager.DeepLTranslate</PackageId>
     <Authors>
     </Authors>
     <Version>1.0.0</Version>
     <Description>An extension for EPiServer.Labs.LanguageManager to allow for translations through DeepL.</Description>
     <PackageTags>Optimizely LanguageManager DeepL Translations</PackageTags>
-    <PackageProjectUrl>
+    <PackageProjectUrl>https://github.com/mattpallatt/MP.Episerver.Labs.LanguageManager.DeepLTranslate
     </PackageProjectUrl>
     <RepositoryUrl>
-    </RepositoryUrl>
+    https://github.com/mattpallatt/MP.Episerver.Labs.LanguageManager.DeepLTranslate</RepositoryUrl>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
     <PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
     <PackageReleaseNotes></PackageReleaseNotes>
+    <RepositoryType>git</RepositoryType>
   </PropertyGroup>
   <ItemGroup>
     <PackageReference Include="DeepL.net" Version="1.9.0" />
