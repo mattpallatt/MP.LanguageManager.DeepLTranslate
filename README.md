@@ -1,4 +1,4 @@
-# MP.Episerver.Labs.LanguageManager.DeepLTranslate
+# MP.LanguageManager.DeepLTranslate
 
 ## Description
 
