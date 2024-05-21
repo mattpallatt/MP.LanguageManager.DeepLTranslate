@@ -31,6 +31,7 @@ namespace MP.Episerver.Labs.LanguageManager.DeepLTranslate
             var dlfv = translatorConfig.GetValue<string>("DeepL:Formality");    
             EnglishType = translatorConfig.GetValue<string>("DeepL:English");
 
+            if (dlfv == null) { dlfv = "Default"; }
             if (EnglishType == null) { EnglishType = "en-GB"; }
 
             switch (dlfv.ToLower())
