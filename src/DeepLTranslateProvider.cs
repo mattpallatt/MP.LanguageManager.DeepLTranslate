@@ -27,9 +27,10 @@ namespace MP.Episerver.Labs.LanguageManager.DeepLTranslate
             var languageManagerConfig = new LanguageManagerConfig(languageManagerOptions);
             authkey = languageManagerConfig.ActiveTranslatorProvider.SubscriptionKey;
 
-            var MyConfig = new ConfigurationBuilder().AddJsonFile("appsettings.json").Build();
-            var dlfv = MyConfig.GetValue<string>("DeepL:Formality");    
-            EnglishType = MyConfig.GetValue<string>("DeepL:English");
+            var translatorConfig = new ConfigurationBuilder().AddJsonFile("appsettings.json").Build();
+            var dlfv = translatorConfig.GetValue<string>("DeepL:Formality");    
+            EnglishType = translatorConfig.GetValue<string>("DeepL:English");
+
             if (EnglishType == "") { EnglishType = "en-GB"; }
 
             switch (dlfv)
@@ -95,9 +96,9 @@ namespace MP.Episerver.Labs.LanguageManager.DeepLTranslate
             var translator = new DeepL.Translator(authkey);
             var translatedText = await translator.TranslateTextAsync(
                 inputText,
-                slci.TwoLetterISOLanguageName,
-                tl,
-                new TextTranslateOptions { Formality = DLFormality, PreserveFormatting = true, SentenceSplittingMode = SentenceSplittingMode.Off }
+                slci.TwoLetterISOLanguageName.ToUpper(),
+                tl.ToUpper(),
+                new TextTranslateOptions { Formality = DLFormality}
                 );
 
             return translatedText;
