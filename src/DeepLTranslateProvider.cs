@@ -31,14 +31,14 @@ namespace MP.Episerver.Labs.LanguageManager.DeepLTranslate
             var dlfv = translatorConfig.GetValue<string>("DeepL:Formality");    
             EnglishType = translatorConfig.GetValue<string>("DeepL:English");
 
-            if (EnglishType == "") { EnglishType = "en-GB"; }
+            if (EnglishType == null) { EnglishType = "en-GB"; }
 
-            switch (dlfv)
+            switch (dlfv.ToLower())
             {
-                case "Less": DLFormality = DeepL.Formality.Less; break;
-                case "More": DLFormality = DeepL.Formality.More; break;
-                case "PreferLess": DLFormality = DeepL.Formality.PreferLess; break;
-                case "PreferMore": DLFormality = DeepL.Formality.PreferMore; break;
+                case "less": DLFormality = DeepL.Formality.Less; break;
+                case "more": DLFormality = DeepL.Formality.More; break;
+                case "preferless": DLFormality = DeepL.Formality.PreferLess; break;
+                case "prefermore": DLFormality = DeepL.Formality.PreferMore; break;
                 default:
                     DLFormality = DeepL.Formality.Default; break;
 
@@ -86,7 +86,7 @@ namespace MP.Episerver.Labs.LanguageManager.DeepLTranslate
             var tlci = new CultureInfo(targetLanguage);
             string tl = tlci.TwoLetterISOLanguageName.ToString();
             
-            // dealing with deprecated "en" language code
+            // dealing with deprecated "en" target language code
             if (tlci.TwoLetterISOLanguageName.Contains("en") == true)
             {
                 tl = EnglishType;

@@ -10,9 +10,11 @@ To enable LanguageManager to use the DeepL Translator Provider, ensure that it i
 
 You will need a Subscription Key for this extension to function - you can create one at https://www.deepl.com/pro-api
 
+![image](./image/appsettings.png)
+
 A &lt;DeepL&gt;&lt;Formality&gt; Configuration element in appSettings can be used to control the formality of translations, with options Less, More, PreferLess, PreferMore, Default.
 
-An &lt;DeepL&gt;&lt;English&gt; Configuration element in appSettings controls whether to translate to en-GB or en-US where "en" is specified.
+An &lt;DeepL&gt;&lt;English&gt; Configuration element in appSettings controls whether to translate to en-GB or en-US where "En" is your target language in Optimizely.
 
 ## Usage
 
