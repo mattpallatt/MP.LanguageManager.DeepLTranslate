@@ -6,7 +6,7 @@ This package extends the Optimizely CMS Language Manager to allow translations t
 
 ## Configuration
 
-To use the DeepL Translator to perform automation translations ensure it's selected as your selected option in the settings of the Language Manager.
+To use the DeepL Translator to perform automated translations make sure it's selected as Translator Provider in the settings of the Language Manager.
 
 ![image](./img/languagemanager.png)
 
