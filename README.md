@@ -10,7 +10,7 @@ To enable LanguageManager to use the DeepL Translator Provider, ensure that it i
 
 You will need a Subscription Key for this extension to function - you can create one at https://www.deepl.com/pro-api
 
-![image](./image/appsettings.png)
+![image](./img/appsettings.png)
 
 A &lt;DeepL&gt;&lt;Formality&gt; Configuration element in appSettings can be used to control the formality of translations, with options Less, More, PreferLess, PreferMore, Default.
 
