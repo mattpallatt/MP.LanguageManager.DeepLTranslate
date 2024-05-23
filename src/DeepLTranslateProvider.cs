@@ -31,25 +31,23 @@ namespace MP.Episerver.Labs.LanguageManager.DeepLTranslate
             var dlfv = translatorConfig.GetValue<string>("DeepL:Formality");    
             EnglishType = translatorConfig.GetValue<string>("DeepL:English");
 
-            if (dlfv == null) { dlfv = "Default"; }
-            if (EnglishType == null) { EnglishType = "en-GB"; }
+            dlfv ??= "Default";
+            EnglishType ??= "en-GB";
 
             // free API authorisation keys end in :fx...
             if (authkey.EndsWith(":fx")) {
                 // ...set the formality to Default, as this is a Pro feature
                 DLFormality = DeepL.Formality.Default;
             }
-            else { 
-                switch (dlfv.ToLower())
+            else {
+                DLFormality = dlfv.ToLower() switch
                 {
-                    case "less": DLFormality = DeepL.Formality.Less; break;
-                    case "more": DLFormality = DeepL.Formality.More; break;
-                    case "preferless": DLFormality = DeepL.Formality.PreferLess; break;
-                    case "prefermore": DLFormality = DeepL.Formality.PreferMore; break;
-                    default:
-                        DLFormality = DeepL.Formality.Default; break;
-
-                }
+                    "less" => DeepL.Formality.Less,
+                    "more" => DeepL.Formality.More,
+                    "preferless" => DeepL.Formality.PreferLess,
+                    "prefermore" => DeepL.Formality.PreferMore,
+                    _ => DeepL.Formality.Default,
+                };
             }
             
             return true;
