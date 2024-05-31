@@ -16,7 +16,7 @@ You will need a Authentication Key for the DeepL API - you can create one at htt
 
 ![image](./img/appsettings.png)
 
-A &lt;DeepL&gt;&lt;Formality&gt; Configuration element in appSettings can be used to control the formality of translations, with options Less, More, PreferLess, PreferMore, Default - a pro license is required, otherwise any setting other than Default will make the translation hang.
+A &lt;DeepL&gt;&lt;Formality&gt; Configuration element in appSettings can be used to control the formality of translations, with options Less, More, PreferLess, PreferMore, Default - a pro license is required for any other setting than Default.
 
 A &lt;DeepL&gt;&lt;English&gt; Configuration element in appSettings controls whether to translate to en-GB or en-US where "En" is your target language in Optimizely.
 
