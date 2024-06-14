@@ -8,11 +8,15 @@ using DeepL.Model;
 using System.Globalization;
 using DeepL;
 using Microsoft.Extensions.Configuration;
+using EPiServer.ServiceLocation;
+using Microsoft.Extensions.Options;
+using MP.LanguageManager.DeepLTranslate;
 
 namespace MP.Episerver.Labs.LanguageManager.DeepLTranslate
 {
     public class DeepLTranslateProvider : IMachineTranslatorProvider
     {
+        private readonly Injected<IOptions<DeepLOptions>> _options;
 
         public string DisplayName => "DeepL Web Translator";
 
@@ -22,24 +26,27 @@ namespace MP.Episerver.Labs.LanguageManager.DeepLTranslate
 
         public bool Initialize(ITranslatorProviderConfig config)
         {
-            
+
             var languageManagerOptions = new LanguageManagerOptions();
             var languageManagerConfig = new LanguageManagerConfig(languageManagerOptions);
             authkey = languageManagerConfig.ActiveTranslatorProvider.SubscriptionKey;
 
-            var translatorConfig = new ConfigurationBuilder().AddJsonFile("appsettings.json").Build();
-            var dlfv = translatorConfig.GetValue<string>("DeepL:Formality");    
-            EnglishType = translatorConfig.GetValue<string>("DeepL:English");
+            var options = _options.Service.Value;
+
+            var dlfv = options.Formality;
+            EnglishType = options.English;
 
             dlfv ??= "Default";
             EnglishType ??= "en-GB";
 
             // free API authorisation keys end in :fx...
-            if (authkey.EndsWith(":fx")) {
+            if (authkey.EndsWith(":fx"))
+            {
                 // ...set the formality to Default, as this is a Pro feature
                 DLFormality = DeepL.Formality.Default;
             }
-            else {
+            else
+            {
                 DLFormality = dlfv.ToLower() switch
                 {
                     "less" => DeepL.Formality.Less,
@@ -49,7 +56,7 @@ namespace MP.Episerver.Labs.LanguageManager.DeepLTranslate
                     _ => DeepL.Formality.Default,
                 };
             }
-            
+
             return true;
         }
 
@@ -91,7 +98,7 @@ namespace MP.Episerver.Labs.LanguageManager.DeepLTranslate
             var slci = new CultureInfo(sourceLanguage);
             var tlci = new CultureInfo(targetLanguage);
             string tl = tlci.TwoLetterISOLanguageName.ToString();
-            
+
             // dealing with deprecated "en" target language code
             if (tlci.TwoLetterISOLanguageName.Contains("en") == true)
             {
@@ -104,7 +111,7 @@ namespace MP.Episerver.Labs.LanguageManager.DeepLTranslate
                 inputText,
                 slci.TwoLetterISOLanguageName.ToUpper(),
                 tl.ToUpper(),
-                new TextTranslateOptions { Formality = DLFormality}
+                new TextTranslateOptions { Formality = DLFormality }
                 );
 
             return translatedText;
