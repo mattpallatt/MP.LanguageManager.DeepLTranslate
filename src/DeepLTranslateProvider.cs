@@ -1,16 +1,15 @@
-﻿using System;
+﻿using DeepL;
+using DeepL.Model;
 using EPiServer.Labs.LanguageManager;
 using EPiServer.Labs.LanguageManager.Business.Providers;
 using EPiServer.Labs.LanguageManager.Configuration;
 using EPiServer.Labs.LanguageManager.Models;
-using System.Threading.Tasks;
-using DeepL.Model;
-using System.Globalization;
-using DeepL;
-using Microsoft.Extensions.Configuration;
 using EPiServer.ServiceLocation;
 using Microsoft.Extensions.Options;
 using MP.LanguageManager.DeepLTranslate;
+using System;
+using System.Globalization;
+using System.Threading.Tasks;
 
 namespace MP.Episerver.Labs.LanguageManager.DeepLTranslate
 {
