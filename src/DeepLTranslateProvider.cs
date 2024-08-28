@@ -106,11 +106,12 @@ namespace MP.Episerver.Labs.LanguageManager.DeepLTranslate
             else { tl = tlci.TwoLetterISOLanguageName; }
 
             var translator = new DeepL.Translator(authkey);
+
             var translatedText = await translator.TranslateTextAsync(
                 inputText,
                 slci.TwoLetterISOLanguageName.ToUpper(),
                 tl.ToUpper(),
-                new TextTranslateOptions { Formality = DLFormality }
+                new TextTranslateOptions { Formality = DLFormality, TagHandling = "html"}
                 );
 
             return translatedText;
