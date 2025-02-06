@@ -1,14 +1,23 @@
-﻿using DeepL;
+﻿using Castle.Core.Internal;
+using DeepL;
 using DeepL.Model;
+using EPiServer.Core;
+using EPiServer.DataAbstraction;
 using EPiServer.Labs.LanguageManager;
 using EPiServer.Labs.LanguageManager.Business.Providers;
 using EPiServer.Labs.LanguageManager.Configuration;
+using EPiServer.Labs.LanguageManager.Controllers;
 using EPiServer.Labs.LanguageManager.Models;
+using EPiServer.Labs.LanguageManager.Models.Internal;
 using EPiServer.ServiceLocation;
+using EPiServer.Shell.Services.Rest;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
 using MP.LanguageManager.DeepLTranslate;
 using System;
+using System.Collections.Generic;
 using System.Globalization;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace MP.Episerver.Labs.LanguageManager.DeepLTranslate
@@ -56,11 +65,13 @@ namespace MP.Episerver.Labs.LanguageManager.DeepLTranslate
                 };
             }
 
+
             return true;
         }
 
         public TranslateTextResult Translate(string inputText, string sourceLanguage, string targetLanguage)
         {
+
             var translateTextResult = new TranslateTextResult
             {
                 IsSuccess = true,
@@ -97,6 +108,7 @@ namespace MP.Episerver.Labs.LanguageManager.DeepLTranslate
             var slci = new CultureInfo(sourceLanguage);
             var tlci = new CultureInfo(targetLanguage);
             string tl = tlci.TwoLetterISOLanguageName.ToString();
+            string glossaryID = "";
 
             // dealing with deprecated "en" target language code
             if (tlci.TwoLetterISOLanguageName.Contains("en") == true)
@@ -107,11 +119,16 @@ namespace MP.Episerver.Labs.LanguageManager.DeepLTranslate
 
             var translator = new DeepL.Translator(authkey);
 
+            System.Threading.Tasks.Task<GlossaryInfo[]> n = translator.ListGlossariesAsync();
+            n.Wait();
+            List<GlossaryInfo> GI = n.Result.ToList();
+            glossaryID = GI.FirstOrDefault(item => item.SourceLanguageCode == sourceLanguage && item.TargetLanguageCode == targetLanguage.Substring(0, 2))?.GlossaryId;
+
             var translatedText = await translator.TranslateTextAsync(
                 inputText,
                 slci.TwoLetterISOLanguageName.ToUpper(),
                 tl.ToUpper(),
-                new TextTranslateOptions { Formality = DLFormality, TagHandling = "html"}
+                new TextTranslateOptions { Formality = Formality.More, TagHandling = "html", GlossaryId = glossaryID }
                 );
 
             return translatedText;
