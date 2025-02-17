@@ -14,6 +14,12 @@ You will need a Authentication Key for the DeepL API - you can create one at htt
 
 ## AppSettings
 
+Add the following to startup.cs.
+
+services.Configure<DeepLOptions>(_configuration.GetSection("DeepL"));
+
+Thent the following options are valid in appsettings.json 
+
 ![image](./img/appsettings.png)
 
 A &lt;DeepL&gt;&lt;Formality&gt; Configuration element in appSettings can be used to control the formality of translations, with options Less, More, PreferLess, PreferMore, Default - a pro license is required for any other setting than Default.
