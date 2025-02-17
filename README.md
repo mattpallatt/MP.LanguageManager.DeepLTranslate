@@ -20,6 +20,10 @@ A &lt;DeepL&gt;&lt;Formality&gt; Configuration element in appSettings can be use
 
 A &lt;DeepL&gt;&lt;English&gt; Configuration element in appSettings controls whether to translate to en-GB or en-US where "En" is your target language in Optimizely.
 
+A &lt;DeepL&gt;&lt;AutoGlossary&gt; Confguration element in appSettings controls whether ANY available configured glossary in the DeepL account will be used. Options are 0 (off) and 1 (on).
+
+A &lt;DeepL&gt;&lt;GlossaryList&gt; Confguration element in appSettings controls which specific configured glossaries from DeepL account will be used where AutoGlossary is set to 0. Format is comma delimited [2 letter source lang > 2 letter target lang] i.e. [en>de].
+
 ## Usage
 
 - Install the Languages Gadget (https://nuget.optimizely.com/package/?id=EPiServer.Labs.LanguageManager)
