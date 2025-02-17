@@ -10,5 +10,7 @@ namespace MP.LanguageManager.DeepLTranslate
     {
         public string Formality { get; set; }
         public string English { get; set; }
+        public string AutoGlossary { get; set; }
+        public string GlossaryList { get; set; }
     }
 }

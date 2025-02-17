@@ -31,6 +31,8 @@ namespace MP.Episerver.Labs.LanguageManager.DeepLTranslate
         public DeepL.Formality DLFormality = DeepL.Formality.Default;
         public string EnglishType = "";
         public string authkey = "";
+        public string AutoGlossary = "";
+        public string GlossaryList = "";
 
         public bool Initialize(ITranslatorProviderConfig config)
         {
@@ -40,12 +42,16 @@ namespace MP.Episerver.Labs.LanguageManager.DeepLTranslate
             authkey = languageManagerConfig.ActiveTranslatorProvider.SubscriptionKey;
 
             var options = _options.Service.Value;
+            var dlfv = "default";
 
-            var dlfv = options.Formality;
-            EnglishType = options.English;
-
-            dlfv ??= "Default";
-            EnglishType ??= "en-GB";
+            try
+            {
+                dlfv = (options.Formality.ToLower() == "default" || options.Formality.ToLower() == "more" || options.Formality.ToLower() == "less" || options.Formality.ToLower() == "preferless" || options.Formality.ToLower() == "prefermore") ? options.Formality.ToLower() : dlfv;
+                EnglishType = (options.English.ToLower() == "en-gb" || options.English.ToLower() == "en-us") ? options.English.ToLower() : "en-gb";
+                AutoGlossary = (options.AutoGlossary == "0" || options.AutoGlossary == "1") ? options.AutoGlossary : AutoGlossary;
+                GlossaryList = options.GlossaryList;
+            }
+            catch { }
 
             // free API authorisation keys end in :fx...
             if (authkey.EndsWith(":fx"))
@@ -116,19 +122,21 @@ namespace MP.Episerver.Labs.LanguageManager.DeepLTranslate
                 tl = EnglishType;
             }
             else { tl = tlci.TwoLetterISOLanguageName; }
-
             var translator = new DeepL.Translator(authkey);
 
-            System.Threading.Tasks.Task<GlossaryInfo[]> n = translator.ListGlossariesAsync();
-            n.Wait();
-            List<GlossaryInfo> GI = n.Result.ToList();
-            glossaryID = GI.FirstOrDefault(item => item.SourceLanguageCode == sourceLanguage && item.TargetLanguageCode == targetLanguage.Substring(0, 2))?.GlossaryId;
+            if ((AutoGlossary == "1") || (GlossaryList.Contains($"[{slci}>{tlci}]")))
+            {
+                System.Threading.Tasks.Task<GlossaryInfo[]> n = translator.ListGlossariesAsync();
+                n.Wait();
+                List<GlossaryInfo> GI = n.Result.ToList();
+                glossaryID = GI.FirstOrDefault(item => item.SourceLanguageCode == slci.ToString() && item.TargetLanguageCode == tlci.ToString())?.GlossaryId;
+            }
 
             var translatedText = await translator.TranslateTextAsync(
                 inputText,
                 slci.TwoLetterISOLanguageName.ToUpper(),
                 tl.ToUpper(),
-                new TextTranslateOptions { Formality = Formality.More, TagHandling = "html", GlossaryId = glossaryID }
+                new TextTranslateOptions { Formality = DLFormality, TagHandling = "html", GlossaryId = glossaryID }
                 );
 
             return translatedText;
