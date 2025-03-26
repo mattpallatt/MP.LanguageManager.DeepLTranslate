@@ -14,6 +14,7 @@ using EPiServer.Shell.Services.Rest;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
 using MP.LanguageManager.DeepLTranslate;
+using Org.BouncyCastle.Crypto.Modes.Gcm;
 using System;
 using System.Collections.Generic;
 using System.Globalization;
@@ -114,14 +115,20 @@ namespace MP.Episerver.Labs.LanguageManager.DeepLTranslate
             var slci = new CultureInfo(sourceLanguage);
             var tlci = new CultureInfo(targetLanguage);
             string tl = tlci.TwoLetterISOLanguageName.ToString();
-            string glossaryID = "";
 
-            // dealing with deprecated "en" target language code
-            if (tlci.TwoLetterISOLanguageName.Contains("en") == true)
+            // deal with PT, ZH (xx-xx) language codes
+            if (tl == "pt" || tl == "zh") {
+                tl = targetLanguage;
+            }
+            // dealing with depreciated "en" target language code using default EN code
+            else if (tl == "en")
             {
                 tl = EnglishType;
             }
-            else { tl = tlci.TwoLetterISOLanguageName; }
+
+            // reset the glossary ID
+            string glossaryID = "";
+
             var translator = new DeepL.Translator(authkey);
 
             if ((AutoGlossary == "1") || (GlossaryList.Contains($"[{slci}>{tlci}]")))

@@ -5,3 +5,6 @@
 
 ## Changes in version 1.0.5
 - Updated to include funcitonality for dealing with DeepL Glossary items
+
+## Changes in version 1.0.8
+- Updated to fix issues with Chinese and Portuguese translations
