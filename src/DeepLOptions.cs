@@ -12,5 +12,6 @@ namespace MP.LanguageManager.DeepLTranslate
         public string English { get; set; }
         public string AutoGlossary { get; set; }
         public string GlossaryList { get; set; }
+        public string ignoreExistingPages { get; set; }
     }
 }

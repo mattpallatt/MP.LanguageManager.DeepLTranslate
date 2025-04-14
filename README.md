@@ -19,9 +19,15 @@ Add the following to startup.cs.
 services.Configure<DeepLOptions>(_configuration.GetSection("DeepL"));
 
 Thent the following options are valid in appsettings.json 
-
-![image](./img/appsettings.png)
-
+<pre>
+  "DeepL": {
+    "Formality": "low",
+    "English": "en-GB",
+    "AutoGlossary": "0",
+    "GlossaryList": "[en>de]",
+    "ignoreExistingPages":  "1"
+  },
+</pre>
 A &lt;DeepL&gt;&lt;Formality&gt; Configuration element in appSettings can be used to control the formality of translations, with options Less, More, PreferLess, PreferMore, Default - a pro license is required for any other setting than Default.
 
 A &lt;DeepL&gt;&lt;English&gt; Configuration element in appSettings controls whether to translate to en-GB or en-US where "En" is your target language in Optimizely.
@@ -29,6 +35,8 @@ A &lt;DeepL&gt;&lt;English&gt; Configuration element in appSettings controls whe
 A &lt;DeepL&gt;&lt;AutoGlossary&gt; Confguration element in appSettings controls whether ANY available configured glossary in the DeepL account will be used. Options are 0 (off) and 1 (on).
 
 A &lt;DeepL&gt;&lt;GlossaryList&gt; Confguration element in appSettings controls which specific configured glossaries from DeepL account will be used where AutoGlossary is set to 0. Format is comma delimited [2 letter source lang > 2 letter target lang] i.e. [en>de].
+
+A &lt;DeepL&gt;&lt;ignoreExistingPages&gt; Configuration element in appSettings controls whether to ignore existing pages in the target language. Options are 0 (off) and 1 (on). This is useful if you want to stop the re-translation of content in a target language. Default is 1 (on).
 
 ## Usage
 
