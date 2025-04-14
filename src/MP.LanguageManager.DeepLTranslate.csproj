@@ -10,7 +10,7 @@
     <PackageId>MP.LanguageManager.DeepLTranslate</PackageId>
     <Authors>
     </Authors>
-    <Version>1.0.8</Version>
+    <Version>1.0.9</Version>
     <Description>An extension for EPiServer.Labs.LanguageManager to allow for translations through DeepL.</Description>
     <PackageTags>Optimizely LanguageManager DeepL Translations</PackageTags>
     <PackageProjectUrl>https://github.com/mattpallatt/MP.LanguageManager.DeepLTranslate
@@ -21,8 +21,8 @@
     <PackageReleaseNotes></PackageReleaseNotes>
     <RepositoryType>git</RepositoryType>
     <PackageReadmeFile>README.md</PackageReadmeFile>
-    <AssemblyVersion>1.0.8</AssemblyVersion>
-    <FileVersion>1.0.8</FileVersion>
+    <AssemblyVersion>1.0.9</AssemblyVersion>
+    <FileVersion>1.0.9</FileVersion>
   </PropertyGroup>
   <ItemGroup>
     <PackageReference Include="DeepL.net" Version="1.10.0" />
