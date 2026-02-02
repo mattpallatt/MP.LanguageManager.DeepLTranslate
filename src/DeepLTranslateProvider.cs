@@ -1,22 +1,13 @@
-﻿using Castle.Core.Internal;
-using DeepL;
+﻿using DeepL;
 using DeepL.Model;
-using EPiServer.Core;
-using EPiServer.DataAbstraction;
 using EPiServer.Labs.LanguageManager;
 using EPiServer.Labs.LanguageManager.Business.Providers;
 using EPiServer.Labs.LanguageManager.Configuration;
-using EPiServer.Labs.LanguageManager.Controllers;
 using EPiServer.Labs.LanguageManager.Models;
-using EPiServer.Labs.LanguageManager.Models.Internal;
 using EPiServer.ServiceLocation;
-using EPiServer.Shell.Services.Rest;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
 using MP.LanguageManager.DeepLTranslate;
-using Org.BouncyCastle.Crypto.Modes.Gcm;
 using System;
-using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using System.Threading.Tasks;
@@ -111,45 +102,77 @@ namespace MP.Episerver.Labs.LanguageManager.DeepLTranslate
 
         public async Task<TextResult> DoTranslate(string inputText, string sourceLanguage, string targetLanguage)
         {
+            var sourceLanguageCode = FetchDeeplSourceLanguageCode(sourceLanguage);
+            var targetLanguageCode = FetchDeeplTargetLanguageCode(targetLanguage);
 
-            var slci = new CultureInfo(sourceLanguage);
-            var tlci = new CultureInfo(targetLanguage);
-            string tl = tlci.TwoLetterISOLanguageName.ToString();
+            string? glossaryId = string.Empty;
 
-            // deal with PT, ZH (xx-xx) language codes
-            if (tl == "pt" || tl == "zh") {
-                tl = targetLanguage;
-            }
-            // dealing with depreciated "en" target language code using default EN code
-            else if (tl == "en")
+            var translator = new Translator(authkey);
+
+            if ((AutoGlossary == "1") || (GlossaryList.Contains($"[{sourceLanguageCode}>{targetLanguageCode}]")))
             {
-                tl = EnglishType;
+                GlossaryInfo[] glossaryInfos = await translator.ListGlossariesAsync();
+                glossaryId = glossaryInfos.FirstOrDefault(item =>
+                    item.SourceLanguageCode.Equals(sourceLanguageCode, StringComparison.OrdinalIgnoreCase) &&
+                    item.TargetLanguageCode.Equals(targetLanguageCode, StringComparison.OrdinalIgnoreCase))?.GlossaryId;
             }
 
-            // reset the glossary ID
-            string glossaryID = "";
-
-            var translator = new DeepL.Translator(authkey);
-
-            if ((AutoGlossary == "1") || (GlossaryList.Contains($"[{slci}>{tlci}]")))
+            try
             {
-                System.Threading.Tasks.Task<GlossaryInfo[]> n = translator.ListGlossariesAsync();
-                n.Wait();
-                List<GlossaryInfo> GI = n.Result.ToList();
-                glossaryID = GI.FirstOrDefault(item => item.SourceLanguageCode == slci.ToString() && item.TargetLanguageCode == tlci.ToString())?.GlossaryId;
-            }
-
-            var translatedText = await translator.TranslateTextAsync(
-                inputText,
-                slci.TwoLetterISOLanguageName.ToUpper(),
-                tl.ToUpper(),
-                new TextTranslateOptions { Formality = DLFormality, TagHandling = "html", GlossaryId = glossaryID }
+                var translatedText = await translator.TranslateTextAsync(
+                    inputText,
+                    sourceLanguageCode,
+                    targetLanguageCode,
+                    new TextTranslateOptions { Formality = DLFormality, TagHandling = "html", GlossaryId = glossaryId }
                 );
 
-            return translatedText;
-
+                return translatedText;
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
+                throw;
+            }
         }
 
+        private string FetchDeeplSourceLanguageCode(string languageCode)
+        {
+            var culture = new CultureInfo(languageCode);
+            string targetCode = culture.TwoLetterISOLanguageName;
+
+            // DeepL uses ISO 639-2 code for Norwegian language
+            if (targetCode.Equals("no", StringComparison.OrdinalIgnoreCase))
+            {
+                targetCode = "NB";
+            }
+
+            return targetCode.ToUpper();
+        }
+
+        private string FetchDeeplTargetLanguageCode(string languageCode)
+        {
+            var culture = new CultureInfo(languageCode);
+            string targetCode = culture.TwoLetterISOLanguageName;
+
+            // DeepL uses ISO 639-2 code for Norwegian language
+            if (targetCode.Equals("no", StringComparison.OrdinalIgnoreCase))
+            {
+                targetCode = "NB";
+            }
+            // deal with PT, ZH (xx-xx) language codes
+            else if (targetCode.Equals("pt", StringComparison.OrdinalIgnoreCase) ||
+                     targetCode.Equals("zh", StringComparison.OrdinalIgnoreCase))
+            {
+                targetCode = languageCode;
+            }
+            // dealing with depreciated "en" target language code using default EN code
+            else if (targetCode.Equals("en", StringComparison.OrdinalIgnoreCase))
+            {
+                targetCode = EnglishType;
+            }
+
+            return targetCode.ToUpper();
+        }
     }
 
 }
