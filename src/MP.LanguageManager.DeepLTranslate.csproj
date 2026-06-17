@@ -8,8 +8,9 @@
   <PropertyGroup>
     <Title>MP.LanguageManager.DeepLTranslate</Title>
     <PackageId>MP.LanguageManager.DeepLTranslate</PackageId>
-    <Authors>
-    </Authors>
+	  <Authors>
+		  Matt Pallatt
+	  </Authors>
     <Version>1.0.9</Version>
     <Description>An extension for EPiServer.Labs.LanguageManager to allow for translations through DeepL.</Description>
     <PackageTags>Optimizely LanguageManager DeepL Translations</PackageTags>
