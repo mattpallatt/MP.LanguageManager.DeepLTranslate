@@ -1,6 +1,5 @@
 ﻿using EPiServer.Core;
 using EPiServer.Labs.LanguageManager.Business;
-using EPiServer.Labs.LanguageManager.Service;
 using EPiServer;
 using System;
 using System.Collections.Generic;

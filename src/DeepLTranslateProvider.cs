@@ -1,6 +1,5 @@
 ﻿using DeepL;
 using DeepL.Model;
-using EPiServer.Labs.LanguageManager;
 using EPiServer.Labs.LanguageManager.Business.Providers;
 using EPiServer.Labs.LanguageManager.Configuration;
 using EPiServer.Labs.LanguageManager.Models;
@@ -17,6 +16,7 @@ namespace MP.Episerver.Labs.LanguageManager.DeepLTranslate
     public class DeepLTranslateProvider : IMachineTranslatorProvider
     {
         private readonly Injected<IOptions<DeepLOptions>> _options;
+        private readonly Injected<ILanguageManagerConfig> _languageManagerConfig;
 
         public string DisplayName => "DeepL Web Translator";
 
@@ -29,9 +29,7 @@ namespace MP.Episerver.Labs.LanguageManager.DeepLTranslate
         public bool Initialize(ITranslatorProviderConfig config)
         {
 
-            var languageManagerOptions = new LanguageManagerOptions();
-            var languageManagerConfig = new LanguageManagerConfig(languageManagerOptions);
-            authkey = languageManagerConfig.ActiveTranslatorProvider.SubscriptionKey;
+            authkey = _languageManagerConfig.Service.ActiveTranslatorProvider?.SubscriptionKey ?? "";
 
             var options = _options.Service.Value;
             var dlfv = "default";
@@ -67,7 +65,13 @@ namespace MP.Episerver.Labs.LanguageManager.DeepLTranslate
             return true;
         }
 
+        // Language Manager 5.x (CMS 12) calls the synchronous Translate; 6.x (CMS 13) calls TranslateAsync
         public TranslateTextResult Translate(string inputText, string sourceLanguage, string targetLanguage)
+        {
+            return TranslateAsync(inputText, sourceLanguage, targetLanguage).GetAwaiter().GetResult();
+        }
+
+        public async Task<TranslateTextResult> TranslateAsync(string inputText, string sourceLanguage, string targetLanguage)
         {
 
             var translateTextResult = new TranslateTextResult
@@ -84,10 +88,9 @@ namespace MP.Episerver.Labs.LanguageManager.DeepLTranslate
             try
             {
 
-                var n = DoTranslate(inputText, sourceLanguage, targetLanguage);
-                n.Wait();
+                var n = await DoTranslate(inputText, sourceLanguage, targetLanguage);
 
-                translateTextResult.Text = n.Result.ToString();
+                translateTextResult.Text = n.ToString();
                 translateTextResult.IsSuccess = true;
 
             }

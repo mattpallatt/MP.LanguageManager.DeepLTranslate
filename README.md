@@ -4,6 +4,23 @@
 
 This package extends the Optimizely CMS Language Manager to allow translations through the DeepL API.
 
+## Compatibility
+
+| Optimizely CMS | .NET | EPiServer.Labs.LanguageManager |
+|---|---|---|
+| CMS 12 | .NET 8 | 5.3 or later 5.x |
+| CMS 13 | .NET 10 | 6.0 or later 6.x |
+
+On CMS 13, Language Manager 6 no longer registers itself. Add `.AddLanguageManager()` (namespace `EPiServer.DependencyInjection`) to your service registration in startup.cs:
+
+<pre>
+services
+    .AddCmsHost()
+    .AddCmsCore()
+    .AddCmsUI()
+    .AddLanguageManager();
+</pre>
+
 ## Configuration
 
 To use the DeepL Translator to perform automated translations make sure it's selected as Translator Provider in the settings of the Language Manager.

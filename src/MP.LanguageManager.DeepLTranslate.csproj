@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <OutputType>Library</OutputType>
-    <TargetFrameworks>net8.0</TargetFrameworks>
+    <TargetFrameworks>net8.0;net10.0</TargetFrameworks>
     <Nullable>enable</Nullable>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
   </PropertyGroup>
@@ -11,7 +11,7 @@
 	  <Authors>
 		  Matt Pallatt
 	  </Authors>
-    <Version>1.0.10</Version>
+    <Version>1.1.0</Version>
     <Description>An extension for EPiServer.Labs.LanguageManager to allow for translations through DeepL.</Description>
     <PackageTags>Optimizely LanguageManager DeepL Translations</PackageTags>
     <PackageProjectUrl>https://github.com/mattpallatt/MP.LanguageManager.DeepLTranslate
@@ -19,21 +19,24 @@
     <RepositoryUrl>https://github.com/mattpallatt/MP.LanguageManager.DeepLTranslate</RepositoryUrl>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
     <PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
-    <PackageReleaseNotes></PackageReleaseNotes>
+    <PackageReleaseNotes>Adds support for Optimizely CMS 13 (.NET 10, Language Manager 6) alongside CMS 12.</PackageReleaseNotes>
     <RepositoryType>git</RepositoryType>
     <PackageReadmeFile>README.md</PackageReadmeFile>
-    <AssemblyVersion>1.0.10</AssemblyVersion>
-    <FileVersion>1.0.10</FileVersion>
+    <AssemblyVersion>1.1.0</AssemblyVersion>
+    <FileVersion>1.1.0</FileVersion>
   </PropertyGroup>
   <ItemGroup>
     <PackageReference Include="DeepL.net" Version="1.10.0" />
-    <PackageReference Include="EPiServer.Labs.LanguageManager" Version="5.3.0" />
-    <PackageReference Include="EPiServer.CMS.UI" Version="12.31.2" />
   </ItemGroup>
-  <ItemGroup Condition="'$(TargetFramework)' == 'net6.0'">
-    <PackageReference Include="EPiServer.CMS">
-      <Version>12.29.1</Version>
-    </PackageReference>
+  <!-- CMS 12 -->
+  <ItemGroup Condition="'$(TargetFramework)' == 'net8.0'">
+    <PackageReference Include="EPiServer.Labs.LanguageManager" Version="[5.3.0, 6.0.0)" />
+    <PackageReference Include="EPiServer.CMS.UI" Version="[12.31.2, 13.0.0)" />
+  </ItemGroup>
+  <!-- CMS 13 -->
+  <ItemGroup Condition="'$(TargetFramework)' == 'net10.0'">
+    <PackageReference Include="EPiServer.Labs.LanguageManager" Version="[6.0.0, 7.0.0)" />
+    <PackageReference Include="EPiServer.CMS.UI" Version="[13.0.1, 14.0.0)" />
   </ItemGroup>
   <ItemGroup>
     <None Update="README.md">
